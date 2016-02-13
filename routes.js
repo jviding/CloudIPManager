@@ -70,36 +70,29 @@ module.exports = function(apiRoutes, app, jwt, callback) {
 	// route to get external IP address of raspberry
 	apiRoutes.get('/getip', function (req, res) {
 		IP.find({}, function (err, ipAddrs) {
-			res.json({ ip: ipAddrs[0].ip });
+			res.json({ ip: ipAddrs[0].ip, lastUpdate: ipAddrs[0].lastUpdate });
 		});
 	});
 
 	// route to set external IP address (for RaspBerry only)
-	apiRoutes.post('/setip', function (req, res) {
+	apiRoutes.get('/setip', function (req, res) {
 		// get IP from request
 		var ip = req.headers['x-forwarded-for'];
 		// check it's RaspBerry
-		User.findOne({
-			name: req.body.name
-		}, function (err, user) {
-			if (err) throw err;
-			// if raspberry
-			if (user.rasp === true) {
-				// check if IP has changed
-				IP.findOne({ 
-					ip: ip 
-				}, function (err, ipAddr) {
-					// if new IP, update
-					if (ip != ipAddr.ip) {
-						ipAddr.ip = ip;
-					}
-					ipAddr.lastUpdate = Date.now();
-					ipAddr.save();
-				});
-			} else {
-				res.json({ success: false, message: 'No authorization for attempted action.' });
-			}
-		});
+		if (req.decoded['_doc'].rasp === true) {
+			// check if IP has changed
+			IP.find({}, function (err, ipAddrs) {
+				// if new IP, update
+				if (ip !== ipAddrs[0].ip) {
+					ipAddrs[0].ip = ip;
+				}
+				ipAddrs[0].lastUpdate = Date.now();
+				ipAddrs[0].save();
+				res.json({ success: true });
+			});
+		} else {
+			res.json({ success: false, message: 'No authorization for attempted action.' });
+		}
 	});
 
 	callback();
