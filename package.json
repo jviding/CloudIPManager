@@ -1,0 +1,19 @@
+{
+  "name": "cloud-IP-get",
+  "version": "1.0.0",
+  "description": "get external IP of raspberry",
+  "main": "index.js",
+  "dependencies": {
+  	"express": "latest",
+  	"morgan": "latest",
+  	"mongoose": "latest",
+  	"body-parser": "latest",
+  	"jsonwebtoken": "latest"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "mr.jasu",
+  "license": "ISC"
+}
