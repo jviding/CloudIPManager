@@ -92,10 +92,9 @@ module.exports = function(apiRoutes, app, jwt, callback) {
 					// if new IP, update
 					if (ip != ipAddr.ip) {
 						ipAddr.ip = ip;
-						ipAddr.save();
-					} else {
-						return;
 					}
+					ipAddr.lastUpdate = Date.now();
+					ipAddr.save();
 				});
 			} else {
 				res.json({ success: false, message: 'No authorization for attempted action.' });
