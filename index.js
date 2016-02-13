@@ -4,17 +4,17 @@ var http       = require('http');
 var httpServer = http.Server(app);
 var bodyParser = require('body-parser');
 var morgan     = require('morgan');
-//var mongoose   = require('mongoose');
+var mongoose   = require('mongoose');
 
 var jwt    = require('jsonwebtoken');
-//var config = require('./config');
+var config = require('./config');
 
 var routes = require('./routes');
 
 // CONFIGURATION
 const port = process.env.PORT || 3005;
-//mongoose.connect(config.database);
-//app.set('superSecret', config.secret); // secret variable
+mongoose.connect(config.database);
+app.set('superSecret', config.secret); // secret variable
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

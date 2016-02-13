@@ -5,34 +5,30 @@ module.exports = function(apiRoutes, app, jwt, callback) {
 	
 	// API ROUTES
 
-	// route to set external IP address of raspberry
-	apiRoutes.get('/setip', function (req, res) {
-	//apiRoutes.post('/setip', function (req, res) {
-		// get IP from req
-		var ip = req.headers['x-forwarded-for'];
-		res.json({ message: 'Welcome to the coolest API on earth!', ip: ip });
+	// ROUTES NOT REQUIRING AN AUTHENTICATION
+	apiRoutes.get('/', function (req, res) {
+	  res.json({ message: 'Welcome to the mrJasu IP api!' });
 	});
 
 	// route to authenticate a user
-	/*apiRoutes.post('/authenticate', function (req, res) {
+	apiRoutes.post('/authenticate', function (req, res) {
 		// find the user
 		User.findOne({
 			name: req.body.name
 		}, function(err, user) {
 			if (err) throw err;
 			if (!user) {
-				res.json({ success: false, message: 'Authentication failed. User not found.'});
+				res.json({ success: false, message: 'Authentication failed. User not found.' });
 			} else if (user) {
 				// check if password matches
 				if (user.password != req.body.password) {
-					res.json({ success: false, message: 'Authentication failed. Wrong password.'});
+					res.json({ success: false, message: 'Authentication failed. Wrong password.' });
 				} else {
 					// user found and password is right
 					// create a token
 					var token = jwt.sign(user, app.get('superSecret'), {
 						expiresInMinutes: 1440 // expires in 24 hours
 					});
-					console.log(token);
 					// return the information including token as JSON
 					res.json({
 						success: true,
@@ -71,29 +67,41 @@ module.exports = function(apiRoutes, app, jwt, callback) {
 
 	// ROUTES REQUIRING AN AUTHENTICATION
 
-	// route to show a random message (GET http://localhost:8080/api/)
-	apiRoutes.get('/', function (req, res) {
-	  res.json({ message: 'Welcome to the coolest API on earth!' });
-	});
-
-	// route to return all users (GET http://localhost:8080/api/users)
-	apiRoutes.get('/users', function (req, res) {
-  		User.find({}, function (err, users) {
-    		res.json(users);
-  		});
-	});
-
 	// route to get external IP address of raspberry
 	apiRoutes.get('/getip', function (req, res) {
-
+		IP.find({}, function (err, ipAddrs) {
+			res.json({ ip: ipAddrs[0].ip });
+		});
 	});
 
-	// route to set external IP address of raspberry
-	/*apiRoutes.post('/setip', function (req, res) {
-		// get IP from req
+	// route to set external IP address (for RaspBerry only)
+	apiRoutes.post('/setip', function (req, res) {
+		// get IP from request
 		var ip = req.headers['x-forwarded-for'];
-		console.log(ip);
-	});*/
+		// check it's RaspBerry
+		User.findOne({
+			name: req.body.name
+		}, function (err, user) {
+			if (err) throw err;
+			// if raspberry
+			if (user.rasp === true) {
+				// check if IP has changed
+				IP.findOne({ 
+					ip: ip 
+				}, function (err, ipAddr) {
+					// if new IP, update
+					if (ip != ipAddr.ip) {
+						ipAddr.ip = ip;
+						ipAddr.save();
+					} else {
+						return;
+					}
+				});
+			} else {
+				res.json({ success: false, message: 'No authorization for attempted action.' });
+			}
+		});
+	});
 
 	callback();
 };
