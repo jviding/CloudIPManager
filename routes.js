@@ -7,7 +7,9 @@ module.exports = function(apiRoutes, app, jwt, callback) {
 
 	// ROUTES NOT REQUIRING AN AUTHENTICATION
 	apiRoutes.get('/', function (req, res) {
-	  res.json({ message: 'Welcome to the mrJasu cloudIP api!' });
+		var ip = req.headers['X-Real-IP'] 
+			|| req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+	  	res.json({ message: 'Welcome to the mrJasu cloudIP api! Your IP:', ip: ip });
 	});
 
 	// route to authenticate a user
