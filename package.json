@@ -4,11 +4,12 @@
   "description": "get external IP of raspberry",
   "main": "index.js",
   "dependencies": {
-  	"express": "latest",
-  	"morgan": "latest",
-  	"mongoose": "latest",
-  	"body-parser": "latest",
-  	"jsonwebtoken": "latest"
+    "body-parser": "latest",
+    "express": "latest",
+    "jsonwebtoken": "latest",
+    "mongoose": "latest",
+    "morgan": "latest",
+    "request-ip": "^1.2.2"
   },
   "scripts": {
     "start": "node index.js",

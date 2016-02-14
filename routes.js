@@ -1,5 +1,6 @@
-var User = require('./dbModels/user');
-var IP   = require('./dbModels/ip');
+var User      = require('./dbModels/user');
+var IP        = require('./dbModels/ip');
+var requestIp = require('request-ip');
 
 module.exports = function(apiRoutes, app, jwt, callback) {
 	
@@ -77,7 +78,7 @@ module.exports = function(apiRoutes, app, jwt, callback) {
 	// route to set external IP address (for RaspBerry only)
 	apiRoutes.get('/setip', function (req, res) {
 		// get IP from request
-		var ip = req.headers['x-forwarded-for'];
+		var ip = requestIp.getClientIp(req);
 		// check it's RaspBerry
 		if (req.decoded['_doc'].rasp === true) {
 			// check if IP has changed
