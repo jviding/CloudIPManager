@@ -1,5 +1,5 @@
 {
-  "name": "cloud-IP-get",
+  "name": "cloud-IP-manager",
   "version": "1.0.0",
   "description": "get external IP of raspberry",
   "main": "index.js",
