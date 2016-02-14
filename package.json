@@ -8,8 +8,7 @@
     "express": "latest",
     "jsonwebtoken": "latest",
     "mongoose": "latest",
-    "morgan": "latest",
-    "request-ip": "^1.2.2"
+    "morgan": "latest"
   },
   "scripts": {
     "start": "node index.js",
