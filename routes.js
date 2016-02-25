@@ -71,8 +71,8 @@ module.exports = function(apiRoutes, app, jwt, callback) {
 
 	// route to get external IP address of raspberry
 	apiRoutes.get('/getip', function (req, res) {
-		IP.find({}, function (err, ipAddrs) {
-			res.json({ ip: ipAddrs[0].ip, lastUpdate: ipAddrs[0].lastUpdate });
+		IP.findOne({ owner: req.body.name }, function (err, ipAddr) {
+			res.json({ RaspBerry: ipAddr.raspName, ip: ipAddr.ip, lastUpdate: ipAddr.lastUpdate });
 		});
 	});
 
@@ -84,13 +84,13 @@ module.exports = function(apiRoutes, app, jwt, callback) {
 		// check it's RaspBerry
 		if (req.decoded['_doc'].rasp === true) {
 			// check if IP has changed
-			IP.find({}, function (err, ipAddrs) {
+			IP.findOne({ raspName: req.body.name }, function (err, ipAddr) {
 				// if new IP, update
-				if (ip !== ipAddrs[0].ip) {
-					ipAddrs[0].ip = ip;
+				if (ip !== ipAddr.ip) {
+					ipAddr.ip = ip;
 				}
-				ipAddrs[0].lastUpdate = Date.now();
-				ipAddrs[0].save();
+				ipAddr.lastUpdate = Date.now();
+				ipAddr.save();
 				res.json({ success: true });
 			});
 		} else {

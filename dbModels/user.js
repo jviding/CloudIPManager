@@ -2,6 +2,7 @@
 var mongoose = require('mongoose');
 var userSchema = mongoose.Schema({
 	name: String,
+	raspName: String,
 	password: String,
 	admin: Boolean,
 	rasp: Boolean
