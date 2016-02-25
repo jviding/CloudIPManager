@@ -76,7 +76,7 @@ module.exports = function(apiRoutes, app, jwt, callback) {
 				name:       ipAddr.raspName, 
 				ip:         ipAddr.ip, 
 				lastUpdate: ipAddr.lastUpdate });*/
-			res.json({data:req});
+			res(req);
 //		});
 	});
 
