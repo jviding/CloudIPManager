@@ -74,6 +74,7 @@ module.exports = function(apiRoutes, app, jwt, callback) {
 		IP.findOne({ owner: req.decoded['_doc'].name }, function (err, ipAddr) {
 			if (ipAddr) {
 				res.json({ 
+					success:    true,
 					name:       ipAddr.raspName, 
 					ip:         ipAddr.ip, 
 					lastUpdate: ipAddr.lastUpdate 
