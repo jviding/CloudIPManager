@@ -71,13 +71,12 @@ module.exports = function(apiRoutes, app, jwt, callback) {
 
 	// route to get external IP address of raspberry
 	apiRoutes.get('/getip', function (req, res) {
-//		IP.findOne({ owner: req.body.name }, function (err, ipAddr) {
-			/*res.json({ 
+		IP.findOne({ owner: req.decoded['_doc'].name }, function (err, ipAddr) {
+			res.json({ 
 				name:       ipAddr.raspName, 
 				ip:         ipAddr.ip, 
-				lastUpdate: ipAddr.lastUpdate });*/
-			res(req);
-//		});
+				lastUpdate: ipAddr.lastUpdate });
+		});
 	});
 
 	// route to set external IP address (for RaspBerry only)
