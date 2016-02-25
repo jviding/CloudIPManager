@@ -93,7 +93,7 @@ module.exports = function(apiRoutes, app, jwt, callback) {
 		// check it's RaspBerry
 		if (req.decoded['_doc'].rasp === true) {
 			// check if IP has changed
-			IP.findOne({ raspName: req.body.name }, function (err, ipAddr) {
+			IP.findOne({ raspName: req.decoded['_doc'].name }, function (err, ipAddr) {
 				// if new IP, update
 				if (ip !== ipAddr.ip) {
 					ipAddr.ip = ip;
